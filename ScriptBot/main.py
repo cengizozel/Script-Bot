@@ -5,11 +5,11 @@ import tkinter as tk
 import tkinter.font as tkFont
 from tkinter import ttk
 from tkinter import *
+import pyperclip
 # import urllib.request
 # import urllib.parse
 # import re
 import sys
-
 
 # This is an old program I worked on just for fun, and I came back to it because a friend of mine wanted it.
 # I scrapped some unfinished features (checking for updates, pause and resume buttons).
@@ -52,7 +52,7 @@ def popupmsg(msg):
 
 def thanks():
     popup = tk.Tk()
-    #popup.iconbitmap('icon.ico')
+    # popup.iconbitmap('icon.ico')
 
     popup.resizable(False, False)
     window_height = 200
@@ -120,7 +120,7 @@ if value == 5 or value == 9:
     thanks()
 
 root = tk.Tk()
-root.title("Script Bot 1.0")
+root.title("Script Bot 1.1")
 
 window_height = 600
 window_width = 600
@@ -130,7 +130,7 @@ x_cordinate = int((screen_width / 2) - (window_width / 2))
 y_cordinate = int((screen_height / 2) - (window_height / 2))
 root.geometry("{}x{}+{}+{}".format(window_width, window_height, x_cordinate, y_cordinate))
 
-saveText = open("send.txt", "w")
+saveText = open("send.txt", "w", encoding='utf-8')
 saveText.writelines("")
 saveText.close()
 
@@ -138,19 +138,22 @@ scriptClicked = False
 intervalClicked = False
 interval = 0
 
-sendText = open("send.txt", "r+").read().split()
+sendText = open("send.txt", "r+", encoding='utf-8').read().split()
+sendText2 = open("send.txt", "r+", encoding='utf-8').read().split("\n")
 
 
 def spam_line():
     global exitButton
     exitButton["state"] = "disable"
     global saveText, interval
-    saveText = open("send.txt", "r")
+    saveText = open("send.txt", "r", encoding='utf-8')
     n = 1
     floatInterval = float(interval)
     for word in saveText:
-        pyautogui.typewrite(word)
-        #pyautogui.press("enter")
+        pyperclip.copy(word)
+        pyautogui.hotkey("ctrl", "v")
+        # pyautogui.typewrite(word)
+        pyautogui.press("enter")
         if floatInterval.is_integer() and interval > 0:
             for i in range(int(interval), 0, -1):
                 if n == len(sendText):
@@ -178,7 +181,9 @@ def spam_word():
     n = 1
     floatInterval = float(interval)
     for word in sendText:
-        pyautogui.typewrite(word)
+        pyperclip.copy(word)
+        pyautogui.hotkey("ctrl", "v")
+        # pyautogui.typewrite(word)
         pyautogui.press("enter")
         if floatInterval.is_integer() and interval > 0:
             for i in range(int(interval), 0, -1):
@@ -215,10 +220,10 @@ def spam_message():
             status.configure(text="Type A Number For The Interval")
             return
         global sendText
-        saveText = open("send.txt", "w")
+        saveText = open("send.txt", "w", encoding='utf-8')
         saveText.writelines(text)
         saveText.close()
-        sendText = open("send.txt", "r+").read().split()
+        sendText = open("send.txt", "r+", encoding='utf-8').read().split()
         if (not interval.is_integer() and interval > 1) or interval < 0:
             smallerFont = tkFont.Font(family="Lucida Grande", size=14, weight="bold")
             status.configure(text="PLEASE ENTER AN INTEGER OR A NUMBER BETWEEN 0 AND 1", font=smallerFont)
@@ -310,7 +315,7 @@ def clear_app():
     scriptEntered.insert(1.0, "Enter Your Script")
     intervalEntered.delete(1.0, "end")
     intervalEntered.insert(1.0, "Interval Duration (in seconds)")
-    saveText = open("send.txt", "w")
+    saveText = open("send.txt", "w", encoding='utf-8')
     saveText.writelines("")
     saveText.close()
     status.configure(text="CLEARED!")
@@ -378,6 +383,6 @@ scrollbar.grid(column=1, row=0, sticky='ns', pady=(50, 15))
 scriptEntered.config(yscrollcommand=scrollbar.set)
 scrollbar.config(command=scriptEntered.yview)
 
-#root.iconbitmap('icon.ico')
+# root.iconbitmap('icon.ico')
 root.resizable(False, False)
 root.mainloop()
