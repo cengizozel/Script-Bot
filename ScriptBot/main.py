@@ -152,6 +152,7 @@ def spam_line():
     for word in saveText:
         pyperclip.copy(word)
         pyautogui.hotkey("ctrl", "v")
+        pyautogui.press('backspace')
         # pyautogui.typewrite(word)
         pyautogui.press("enter")
         if floatInterval.is_integer() and interval > 0:
